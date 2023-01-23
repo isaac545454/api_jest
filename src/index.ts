@@ -1,11 +1,4 @@
 import express from "express";
-const a = "a";
-const app = express();
-const port = 3000;
+const app = require("./app");
 
-app.get("/", (req, res) => {
-  res.send("The sedulous hyena ate the antelope!");
-});
-app.listen(port, () => {
-  return console.log(`server is listening on ${port}`);
-});
+app.listen(3001);
