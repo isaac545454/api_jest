@@ -16,6 +16,7 @@
     "@types/node": "^18.11.18",
     "@types/supertest": "^2.0.12",
     "body-parse": "^0.1.0",
+    "consign": "^0.1.6",
     "express": "^4.18.2",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
