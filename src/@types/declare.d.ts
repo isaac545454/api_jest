@@ -1,1 +1,1 @@
-declare module "consign";
+declare module "app.db";

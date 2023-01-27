@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   test: {
     client: "pg",
     version: "9.6",
