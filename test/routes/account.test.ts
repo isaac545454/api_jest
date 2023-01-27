@@ -18,22 +18,12 @@ let user: IUser = {
   password: "123456",
 };
 
-const email = `isaac@gmail.com22222222222${Math.random}`;
-beforeAll(async () => {
-  const res: any = await createUser({
-    name: "count",
-    email: email,
-    password: "1234567",
-  });
-  user = { ...res[0] };
-});
-
 test("deve inserir uma conta com sucesso", () => {
   return Request(app)
     .post(MAIN_ROUTE)
-    .send({ name: "Acc #1", user_id: user!.id })
+    .send({ name: "Acc #1", user_id: user.id })
     .then((response) => {
-      console.log(response);
+      console.log(response.body.name);
 
       expect(response.status).toBe(201);
       expect(response.body.name).toBe("Acc #1");

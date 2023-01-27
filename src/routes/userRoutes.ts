@@ -31,8 +31,6 @@ router.post("/users", async (req: Request, res: Response) => {
 
 router.post("/accounts", async (req: Request, res: Response) => {
   const responseCreateAccounts = await CreateAccounts(req.body);
-  console.log(responseCreateAccounts);
-
   return res.status(201).json(responseCreateAccounts[0]);
 });
 
