@@ -3,7 +3,7 @@ import Request from "supertest";
 
 const app = require("../../src/app");
 
-const email = `isaac@gmail.com22222222222${Math.random}`;
+const email = `isaac@gmail.com22222222222${Math.random()}`;
 test("deve listar os usuarios", () => {
   return Request(app)
     .get("/users")
@@ -14,7 +14,7 @@ test("deve listar os usuarios", () => {
     });
 });
 
-test.skip("deve inserir o usuario com sucesso", () => {
+test("deve inserir o usuario com sucesso", () => {
   return Request(app)
     .post("/users")
     .send({
