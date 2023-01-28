@@ -23,9 +23,16 @@ test("deve inserir uma conta com sucesso", () => {
     .post(MAIN_ROUTE)
     .send({ name: "Acc #1", user_id: user.id })
     .then((response) => {
-      console.log(response.body.name);
-
       expect(response.status).toBe(201);
       expect(response.body.name).toBe("Acc #1");
+    });
+});
+
+test("deve listar todas as contas ", () => {
+  return Request(app)
+    .get(MAIN_ROUTE)
+    .then((response) => {
+      expect(response.status).toBe(200);
+      expect(response.body.length).toBeGreaterThan(0);
     });
 });
