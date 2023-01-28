@@ -3,6 +3,8 @@ const router = Router();
 import { findAll } from "../services/users/findAll";
 import { createUser } from "../services/users/createUser";
 import { CreateAccounts } from "../services/accounts/create";
+import { getAllAccounts } from "../services/accounts/getAll";
+import { getFindOne } from "../services/accounts/getfindOne";
 
 interface Create {
   error?: {
@@ -32,6 +34,16 @@ router.post("/users", async (req: Request, res: Response) => {
 router.post("/accounts", async (req: Request, res: Response) => {
   const responseCreateAccounts = await CreateAccounts(req.body);
   return res.status(201).json(responseCreateAccounts[0]);
+});
+
+router.get("/accounts", async (req, res) => {
+  const data = await getAllAccounts();
+  return res.status(200).json(data);
+});
+
+router.get("/accounts/:id", async (req, res) => {
+  const data = await getFindOne(req.params.id);
+  return res.status(200).json(data[0]);
 });
 
 module.exports = router;

@@ -1,4 +1,5 @@
 import Request from "supertest";
+import { db } from "../../src/app";
 const app = require("../../src/app");
 import { createUser } from "../../src/services/users/createUser";
 
@@ -23,9 +24,36 @@ test("deve inserir uma conta com sucesso", () => {
     .post(MAIN_ROUTE)
     .send({ name: "Acc #1", user_id: user.id })
     .then((response) => {
-      console.log(response.body.name);
-
       expect(response.status).toBe(201);
       expect(response.body.name).toBe("Acc #1");
     });
+});
+
+test("deve listar todas as contas ", () => {
+  return Request(app)
+    .post(MAIN_ROUTE)
+    .send({ name: "Acc #1", user_id: user.id })
+    .then((res) => {
+      Request(app)
+        .get(MAIN_ROUTE)
+        .then((response) => {
+          expect(response.status).toBe(200);
+          expect(response.body.length).toBeGreaterThan(0);
+        });
+    });
+});
+
+test("deve retornar uma conta por id", () => {
+  return Request(app)
+    .post(MAIN_ROUTE)
+    .send({ name: "Acc #1", user_id: user.id })
+    .then((res) =>
+      Request(app)
+        .get(`${MAIN_ROUTE}/${res.body.id}`)
+        .then((response) => {
+          expect(response.status).toBe(200);
+          expect(response.body.name).toBe("Acc #1");
+          expect(response.body.user_id).toBe(user.id);
+        })
+    );
 });
