@@ -28,6 +28,15 @@ test("deve inserir uma conta com sucesso", () => {
       expect(response.body.name).toBe("Acc #1");
     });
 });
+test(" não deve inserir uma conta sem o nome", () => {
+  return Request(app)
+    .post(MAIN_ROUTE)
+    .send({ user_id: user.id })
+    .then((response) => {
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe("nome é um atributo obrigatorio");
+    });
+});
 
 test("deve listar todas as contas ", () => {
   return Request(app)

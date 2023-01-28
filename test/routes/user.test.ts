@@ -76,3 +76,4 @@ test("não deve inserir usuarios com email ja existente", () => {
       expect(response.body.error).toBe("já existe um usuario com esse email");
     });
 });
+

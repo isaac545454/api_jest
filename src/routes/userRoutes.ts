@@ -28,14 +28,14 @@ router.get("/users", async (req: Request, res: Response) => {
 });
 
 router.post("/users", async (req: Request, res: Response) => {
-  console.log(req.body);
-
   const create: any = await createUser(req.body);
   if (create.error) return res.status(400).json(create);
   res.status(201).json(create[0]);
 });
 
 router.post("/accounts", async (req: Request, res: Response) => {
+  if (!req.body.name)
+    return res.status(400).json({ error: "nome é um atributo obrigatorio" });
   const responseCreateAccounts = await CreateAccounts(req.body);
   return res.status(201).json(responseCreateAccounts[0]);
 });
