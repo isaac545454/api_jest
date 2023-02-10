@@ -1,9 +1,12 @@
 import { response } from "express";
 import Request from "supertest";
+import { db } from "../../src/app";
+import { findAOne } from "../../src/services/users/findOne";
 
 const app = require("../../src/app");
 
 const email = `isaac@gmail.com22222222222${Math.random()}`;
+
 test("deve listar os usuarios", () => {
   return Request(app)
     .get("/users")
@@ -28,6 +31,7 @@ test("deve inserir o usuario com sucesso", () => {
       expect(response.body).not.toHaveProperty("password");
     });
 });
+
 test("não deve inserir usuario sem o nome", () => {
   return Request(app)
     .post("/users")
@@ -76,4 +80,20 @@ test("não deve inserir usuarios com email ja existente", () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe("já existe um usuario com esse email");
     });
+});
+
+test("Deve armazenar a senha Criptografada", async () => {
+  const email2 = `isaac@gmail.com22222222222${Math.random()}`;
+  const res = await Request(app).post("/users").send({
+    name: "isaac teste",
+    email: email2,
+    password: "123456",
+  });
+  console.log(res.body);
+  expect(res.status).toBe(201);
+  const { id } = res.body;
+  const userDB = await findAOne(id);
+  expect(userDB.password).not.toBeUndefined();
+  console.log(userDB.password);
+  expect(userDB.password).not.toBe("123456");
 });

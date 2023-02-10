@@ -1,5 +1,6 @@
 import { Request } from "express";
 import { db } from "../../app";
+import bcript from "bcrypt";
 
 interface IUser {
   id?: string;
@@ -7,6 +8,11 @@ interface IUser {
   email: string;
   password: string;
 }
+
+const hashPassword = (password: string) => {
+  const salt = bcript.genSaltSync(10);
+  return bcript.hashSync(password, salt);
+};
 
 export const createUser = async (req: IUser) => {
   if (!req.name) return { error: "nome é um atributo obrigatorio" };
@@ -18,6 +24,8 @@ export const createUser = async (req: IUser) => {
   if (dbUser && dbUser.length > 0) {
     return { error: "já existe um usuario com esse email" };
   }
+
+  req.password = hashPassword(req.password);
 
   const createUser = await db("users").insert(req, ["id", "name", "email"]);
 

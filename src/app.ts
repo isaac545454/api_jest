@@ -7,6 +7,7 @@ const app = express();
 export const db = knex(knesFile.test);
 
 app.use(express.json());
+app.set("db", "../knexfile");
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("The sedulous hyena ate the antelope!");
