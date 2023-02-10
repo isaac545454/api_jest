@@ -1,7 +1,5 @@
 import Request from "supertest";
-import { db } from "../../src/app";
 const app = require("../../src/app");
-import { createUser } from "../../src/services/users/createUser";
 
 interface IUser {
   id?: number;

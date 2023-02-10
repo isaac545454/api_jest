@@ -89,11 +89,11 @@ test("Deve armazenar a senha Criptografada", async () => {
     email: email2,
     password: "123456",
   });
-  console.log(res.body);
+
   expect(res.status).toBe(201);
   const { id } = res.body;
   const userDB = await findAOne(id);
   expect(userDB.password).not.toBeUndefined();
-  console.log(userDB.password);
+
   expect(userDB.password).not.toBe("123456");
 });

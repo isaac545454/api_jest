@@ -7,7 +7,7 @@ import { getAllAccounts } from "../services/accounts/getAll";
 import { getFindOne } from "../services/accounts/getfindOne";
 import { putUpdate } from "../services/accounts/putUpdate";
 import { deleteAccounts } from "../services/accounts/delete";
-import { NextFunction } from "connect";
+import { SignIn } from "../services/users/auth";
 
 interface Create {
   error?: {
@@ -59,6 +59,18 @@ router.put("/accounts/:id", async (req: Request, res: Response) => {
 router.delete("/accounts/:id", async (req: Request, res: Response) => {
   const data = await deleteAccounts(req.params.id);
   return res.status(204).json(data);
+});
+
+router.post("/auth/signIn", async (req: Request, res: Response) => {
+  if (req.body.email === "")
+    return res.status(400).json({ error: "email é um atributo obrigatorio" });
+  if (req.body.password === "")
+    return res
+      .status(400)
+      .json({ error: "password é um atributo obrigatorio" });
+  const data = await SignIn(req, res);
+  if (data.error) return res.status(400).json(data);
+  return res.json(data);
 });
 
 module.exports = router;
