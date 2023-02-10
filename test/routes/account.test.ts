@@ -1,7 +1,5 @@
 import Request from "supertest";
-import { db } from "../../src/app";
 const app = require("../../src/app");
-import { createUser } from "../../src/services/users/createUser";
 
 interface IUser {
   id?: number;
@@ -26,6 +24,15 @@ test("deve inserir uma conta com sucesso", () => {
     .then((response) => {
       expect(response.status).toBe(201);
       expect(response.body.name).toBe("Acc #1");
+    });
+});
+test(" não deve inserir uma conta sem o nome", () => {
+  return Request(app)
+    .post(MAIN_ROUTE)
+    .send({ user_id: user.id })
+    .then((response) => {
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe("nome é um atributo obrigatorio");
     });
 });
 
@@ -56,4 +63,32 @@ test("deve retornar uma conta por id", () => {
           expect(response.body.user_id).toBe(user.id);
         })
     );
+});
+
+test("deve alterar una conta", () => {
+  return Request(app)
+    .post(MAIN_ROUTE)
+    .send({ name: "Acc update", user_id: user.id })
+    .then((res) => {
+      Request(app)
+        .put(`${MAIN_ROUTE}/${res.body.id}`)
+        .send({ name: "Acc update 2" })
+        .then((response) => {
+          expect(response.status).toBe(200);
+          expect(response.body.name).toBe("Acc update 2");
+        });
+    });
+});
+
+test("deve remover uma conta", () => {
+  return Request(app)
+    .post(MAIN_ROUTE)
+    .send({ name: "Acc update", user_id: user.id })
+    .then((res) => {
+      Request(app)
+        .delete(`${MAIN_ROUTE}/${res.body.id}`)
+        .then((response) => {
+          expect(response.status).toBe(204);
+        });
+    });
 });

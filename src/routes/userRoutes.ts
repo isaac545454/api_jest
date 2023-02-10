@@ -5,6 +5,9 @@ import { createUser } from "../services/users/createUser";
 import { CreateAccounts } from "../services/accounts/create";
 import { getAllAccounts } from "../services/accounts/getAll";
 import { getFindOne } from "../services/accounts/getfindOne";
+import { putUpdate } from "../services/accounts/putUpdate";
+import { deleteAccounts } from "../services/accounts/delete";
+import { SignIn } from "../services/users/auth";
 
 interface Create {
   error?: {
@@ -32,18 +35,42 @@ router.post("/users", async (req: Request, res: Response) => {
 });
 
 router.post("/accounts", async (req: Request, res: Response) => {
+  if (!req.body.name)
+    return res.status(400).json({ error: "nome é um atributo obrigatorio" });
   const responseCreateAccounts = await CreateAccounts(req.body);
   return res.status(201).json(responseCreateAccounts[0]);
 });
 
-router.get("/accounts", async (req, res) => {
+router.get("/accounts", async (req: Request, res: Response) => {
   const data = await getAllAccounts();
   return res.status(200).json(data);
 });
 
-router.get("/accounts/:id", async (req, res) => {
+router.get("/accounts/:id", async (req: Request, res: Response) => {
   const data = await getFindOne(req.params.id);
+  return res.status(200).json(data);
+});
+
+router.put("/accounts/:id", async (req: Request, res: Response) => {
+  const data = await putUpdate(req.params.id, req);
   return res.status(200).json(data[0]);
+});
+
+router.delete("/accounts/:id", async (req: Request, res: Response) => {
+  const data = await deleteAccounts(req.params.id);
+  return res.status(204).json(data);
+});
+
+router.post("/auth/signIn", async (req: Request, res: Response) => {
+  if (req.body.email === "")
+    return res.status(400).json({ error: "email é um atributo obrigatorio" });
+  if (req.body.password === "")
+    return res
+      .status(400)
+      .json({ error: "password é um atributo obrigatorio" });
+  const data = await SignIn(req, res);
+  if (data.error) return res.status(400).json(data);
+  return res.json(data);
 });
 
 module.exports = router;
