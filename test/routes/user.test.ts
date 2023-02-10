@@ -25,6 +25,7 @@ test("deve inserir o usuario com sucesso", () => {
     .then((response) => {
       expect(response.status).toBe(201);
       expect(response.body.name).toBe("isaac");
+      expect(response.body).not.toHaveProperty("password");
     });
 });
 test("não deve inserir usuario sem o nome", () => {
@@ -76,4 +77,3 @@ test("não deve inserir usuarios com email ja existente", () => {
       expect(response.body.error).toBe("já existe um usuario com esse email");
     });
 });
-

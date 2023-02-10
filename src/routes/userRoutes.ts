@@ -7,6 +7,7 @@ import { getAllAccounts } from "../services/accounts/getAll";
 import { getFindOne } from "../services/accounts/getfindOne";
 import { putUpdate } from "../services/accounts/putUpdate";
 import { deleteAccounts } from "../services/accounts/delete";
+import { NextFunction } from "connect";
 
 interface Create {
   error?: {
