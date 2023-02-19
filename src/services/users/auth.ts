@@ -18,7 +18,7 @@ const generaToken = ({ id, name, email }: IpayloadToken) => {
 
 export const SignIn = async (req: Request, res: Response) => {
   const user = await db("users").where({ email: req.body.email }).first();
-  if (!user) return res.status(400).json({ error: "usuario não encontrado" });
+  if (!user) return { error: "senha ou email incorreto" };
 
   if (await bcrypt.compare(req.body.password, user.password)) {
     const payload = {
@@ -31,4 +31,6 @@ export const SignIn = async (req: Request, res: Response) => {
 
     return { token: generaTokenUser };
   }
+
+  return { error: "senha ou email incorreto" };
 };

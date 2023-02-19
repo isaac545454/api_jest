@@ -22,3 +22,22 @@ test("Deve Receber Token ao Logar", async () => {
         });
     });
 });
+
+test("não deve authenticar com senha errada", async () => {
+  return Request(app)
+    .post("/users")
+    .send({
+      name: "isaac",
+      email: email,
+      password: "123456",
+    })
+    .then((response) => {
+      Request(app)
+        .post("/auth/signIn")
+        .send({ email: response.body.email, password: "12345" })
+        .then((response) => {
+          expect(response.status).toBe(400);
+          expect(response.body.error).toBe("senha ou email incorreto");
+        });
+    });
+});
