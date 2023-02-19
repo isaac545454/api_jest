@@ -4,7 +4,7 @@ const app = require("../../src/app");
 
 const email = `isaac@gmail.com22222222222${Math.random()}`;
 
-test("Deve Receber Token ao Logar", () => {
+test("Deve Receber Token ao Logar", async () => {
   return Request(app)
     .post("/users")
     .send({
@@ -15,7 +15,7 @@ test("Deve Receber Token ao Logar", () => {
     .then((response) => {
       Request(app)
         .post("/auth/signIn")
-        .send({ email: email, password: "123456" })
+        .send({ email: response.body.email, password: "123456" })
         .then((response) => {
           expect(response.status).toBe(200);
           expect(response.body).toHaveProperty("token");
