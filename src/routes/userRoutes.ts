@@ -8,6 +8,7 @@ import { getFindOne } from "../services/accounts/getfindOne";
 import { putUpdate } from "../services/accounts/putUpdate";
 import { deleteAccounts } from "../services/accounts/delete";
 import { SignIn } from "../services/users/auth";
+import { auth } from "../moddlwares/auth";
 
 interface Create {
   error?: {
@@ -23,7 +24,7 @@ interface ListUser {
   password: string;
 }
 
-router.get("/users", async (req: Request, res: Response) => {
+router.get("/users", auth, async (req: Request, res: Response) => {
   const users: ListUser[] = await findAll();
   res.status(200).json(users);
 });
@@ -69,6 +70,7 @@ router.post("/auth/signIn", async (req: Request, res: Response) => {
       .status(400)
       .json({ error: "password é um atributo obrigatorio" });
   const data = await SignIn(req, res);
+  if (data.error) return res.status(400).json(data);
 
   return res.json(data);
 });
