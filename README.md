@@ -1,1 +1,1 @@
-# api em node, express typescript 
+# api em node, express typescript, postgress e jest
