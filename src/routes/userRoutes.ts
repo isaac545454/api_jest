@@ -29,35 +29,35 @@ router.get("/users", auth, async (req: Request, res: Response) => {
   res.status(200).json(users);
 });
 
-router.post("/users", async (req: Request, res: Response) => {
+router.post("/users", auth, async (req: Request, res: Response) => {
   const create: any = await createUser(req.body);
   if (create.error) return res.status(400).json(create);
   res.status(201).json(create[0]);
 });
 
-router.post("/accounts", async (req: Request, res: Response) => {
+router.post("/accounts", auth, async (req: Request, res: Response) => {
   if (!req.body.name)
     return res.status(400).json({ error: "nome é um atributo obrigatorio" });
   const responseCreateAccounts = await CreateAccounts(req.body);
   return res.status(201).json(responseCreateAccounts[0]);
 });
 
-router.get("/accounts", async (req: Request, res: Response) => {
+router.get("/accounts", auth, async (req: Request, res: Response) => {
   const data = await getAllAccounts();
   return res.status(200).json(data);
 });
 
-router.get("/accounts/:id", async (req: Request, res: Response) => {
+router.get("/accounts/:id", auth, async (req: Request, res: Response) => {
   const data = await getFindOne(req.params.id);
   return res.status(200).json(data);
 });
 
-router.put("/accounts/:id", async (req: Request, res: Response) => {
+router.put("/accounts/:id", auth, async (req: Request, res: Response) => {
   const data = await putUpdate(req.params.id, req);
   return res.status(200).json(data[0]);
 });
 
-router.delete("/accounts/:id", async (req: Request, res: Response) => {
+router.delete("/accounts/:id", auth, async (req: Request, res: Response) => {
   const data = await deleteAccounts(req.params.id);
   return res.status(204).json(data);
 });
@@ -73,6 +73,12 @@ router.post("/auth/signIn", async (req: Request, res: Response) => {
   if (data.error) return res.status(400).json(data);
 
   return res.json(data);
+});
+
+router.post("/auth/signUp", async (req: Request, res: Response) => {
+  const create: any = await createUser(req.body);
+  if (create.error) return res.status(400).json(create);
+  res.status(201).json(create[0]);
 });
 
 module.exports = router;
