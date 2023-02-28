@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 const routeUser = require("./routes/userRoutes");
 import { knex } from "knex";
-import knesFile from "../knexfile";
+import config from "../knexfile";
 
 const app = express();
-export const db = knex(knesFile.test);
+export const db = knex(config.test);
 
 app.use(express.json());
 app.set("db", "../knexfile");
