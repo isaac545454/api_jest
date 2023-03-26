@@ -1,3 +1,4 @@
+require("dotenv").config();
 import express, { Request, Response } from "express";
 const routeUser = require("./routes/userRoutes");
 import { knex } from "knex";
