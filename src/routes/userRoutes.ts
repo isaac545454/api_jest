@@ -70,9 +70,9 @@ router.post("/auth/signIn", async (req: Request, res: Response) => {
       .status(400)
       .json({ error: "password é um atributo obrigatorio" });
   const data = await SignIn(req, res);
-  if (data.error) return res.status(400).json(data);
+  // if (data.error) return res.status(400).json(data);
 
-  return res.json(data);
+  // return res.json(data);
 });
 
 router.post("/auth/signUp", async (req: Request, res: Response) => {

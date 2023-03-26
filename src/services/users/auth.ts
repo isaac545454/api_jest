@@ -11,30 +11,36 @@ interface IpayloadToken {
 }
 
 const generaToken = ({ id, name, email }: IpayloadToken) => {
-  return jwt.sign({ id, name, email }, jwtSecret!, {
+  return jwt.sign({ id, name, email }, process.env.SECRET!, {
     expiresIn: "7d",
   });
 };
 
 export const SignIn = async (req: Request, res: Response) => {
-  const user = await db("users")
-    .where({ email: req.body.email, name: req.body.name })
-    .limit(1)
-    .first();
+  db("users")
+    .select("*")
+    .where({ email: req.body.email })
+    .first()
+    .then(async (user) => {
+      if (!user) {
+        return res.status(400).json({ error: "senha ou email incorreto " });
+      }
 
-  if (!user) return { error: "senha ou email incorreto" };
+      if (!(await bcrypt.compare(req.body.password, user.password))) {
+        return res.status(400).json({ error: "senha ou email incorreto" });
+      }
 
-  if (await bcrypt.compare(req.body.password, user.password)) {
-    const payload = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    };
+      const payload = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
 
-    const generaTokenUser = generaToken(payload);
+      const generaTokenUser = await generaToken(payload);
 
-    return { token: generaTokenUser };
-  }
-
-  return { error: "senha ou email incorreto" };
+      return res.status(200).json({ token: generaTokenUser });
+    })
+    .catch((err) => {
+      return res.status(400).json({ error: "senha ou email incorreto " });
+    });
 };
